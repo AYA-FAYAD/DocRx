@@ -1,32 +1,37 @@
 import { useState, useEffect } from "react";
-import { useGetUserQuery } from "../stors";
+// import { useGetUserQuery } from "../stors";
 import { trpc } from "../client";
 import { SignIn } from "@clerk/clerk-react";
 function LogIn() {
-  const [userName, setUserName] = useState("");
-  const { data: users, error, isLoading, refetch } = trpc.getUser.useQuery();
-  const [searchUserName, setSearchUserName] = useState("");
-  const { data: foundUser, refetch: fetchUserByName } =
-    trpc.getUserByname.useQuery(
-      { userName: searchUserName },
-      { enabled: false }
-    );
+  // const [userName, setUserName] = useState("");
+  // const {
+  //   data: users,
+  //   error,
+  //   isLoading,
+  //   refetch,
+  // } = trpc.user.getUser.useQuery();
+  // const [searchUserName, setSearchUserName] = useState("");
+  // const { data: foundUser, refetch: fetchUserByName } =
+  //   trpc.getUserByname.useQuery(
+  //     { userName: searchUserName },
+  //     { enabled: false }
+  //   );
 
-  const handelClick = async (e) => {
-    setSearchUserName(userName); // Set the username to search for
-    fetchUserByName();
-  };
-  useEffect(() => {
-    if (foundUser) {
-      console.log("Found user:", foundUser);
-    }
-  }, [foundUser]);
+  // const handelClick = async (e) => {
+  //   setSearchUserName(userName); // Set the username to search for
+  //   fetchUserByName();
+  // };
+  // useEffect(() => {
+  //   if (foundUser) {
+  //     console.log("Found user:", foundUser);
+  //   }
+  // }, [foundUser]);
 
   return (
     <div>
       <h1>Log In</h1>
-      {/* <SignIn /> */}
-      <h1>Users List</h1>
+      <SignIn />
+      {/* <h1>Users List</h1>
       <input
         type="text"
         value={userName}
@@ -44,7 +49,7 @@ function LogIn() {
           ))}
         </ul>
       )}
-      <button onClick={refetch}>Refetch Users</button>
+      <button onClick={refetch}>Refetch Users</button> */}
     </div>
   );
 }

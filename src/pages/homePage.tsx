@@ -1,5 +1,3 @@
-import App from "../App";
-
 export function HomePage() {
-  return <App />;
+  return <div>welcom in app</div>;
 }

@@ -1,12 +1,53 @@
-// import React, { useState } from "react";
-// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  SignedIn,
+  SignedOut,
+  RedirectToSignIn,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Router,
+  createRoutesFromElements,
+  Route,
+} from "react-router-dom";
 
-import SayHi from "./sayhhi";
-import LogIn from "./components/logIn";
+import { HomePage } from "./pages/homePage.tsx";
+import NotFoundPage from "./pages/notFoundPage.tsx";
 
-export function App() {
-  // return <SayHi />;
-  return <LogIn />;
+import SignupForm from "./components/signUpForm.tsx";
+import LogIn from "./components/logIn.tsx";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LogIn />} />
+      <Route path="/signup" element={<SignupForm />} />
+    </>
+  )
+);
+
+export default function App() {
+  return (
+    <div>
+      <header>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </header>
+      <main>
+        <SignedIn>
+          <RouterProvider router={router} />
+        </SignedIn>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
+      </main>
+    </div>
+  );
 }
-
-export default App;

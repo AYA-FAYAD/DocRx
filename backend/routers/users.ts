@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { router, publicProcedure } from "../trpc";
 
-import { users } from "../db/schema/schema";
+import { doctors, patients, users } from "../db/schema/schema";
 import { db } from "../db/db";
 import { eq } from "drizzle-orm";
 
@@ -17,7 +17,7 @@ export const userRouter = router({
   getUserByname: publicProcedure
     .input(
       z.object({
-        userName: z.string(),
+        name: z.string(),
       })
     )
     .query(async ({ input }) => {
@@ -25,7 +25,7 @@ export const userRouter = router({
       const user = await db
         .select()
         .from(users)
-        .where(eq(users.userName, input.userName))
+        .where(eq(users.name, input.name))
         .execute();
       console.log("Query result:", user);
       return user;
@@ -48,8 +48,10 @@ export const userRouter = router({
   createUser: publicProcedure
     .input(
       z.object({
-        userName: z.string(),
+        name: z.string(),
         password: z.string(),
+        email: z.string(),
+        role: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -57,12 +59,90 @@ export const userRouter = router({
       const newUser = await db
         .insert(users)
         .values({
-          userName: input.userName,
+          name: input.name,
           password: input.password,
+          email: input.email,
+          role: input.role,
         })
 
         .execute();
 
       return newUser;
+    }),
+
+  updateuser: publicProcedure
+    .input(
+      z.object({
+        id: z.number().int(),
+        name: z.string().optional(),
+        password: z.string().optional(),
+        email: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { id, ...updates } = input;
+      const updateUser = await db
+        .update(users)
+        .set(updates)
+        .where(eq(users.id, id))
+        .execute();
+      return updateUser;
+    }),
+
+  deleteuser: publicProcedure
+    .input(
+      z.object({
+        id: z.number().int(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const deleteUser = await db
+        .delete(users)
+        .where(eq(users.id, input.id))
+        .execute();
+      return deleteUser;
+    }),
+
+  getUserData: publicProcedure
+    .input(
+      z.object({
+        id: z.number().int(),
+      })
+    )
+    .query(async ({ input }) => {
+      const user = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, input.id))
+        .execute();
+      if (!user.length) {
+        return null;
+      }
+
+      const userId = user[0].id;
+      const role = user[0].role;
+
+      let data = {};
+
+      if (role === "doctor") {
+        const doctor = await db
+          .select()
+          .from(doctors)
+          .where(eq(doctors.userId, userId))
+          .execute();
+
+        data = { doctor: doctor[0] || null };
+      } else if (role === "patient") {
+        const patient = await db
+          .select()
+          .from(patients)
+          .where(eq(patients.userId, userId))
+          .execute();
+        data = { patient: patient[0] || null };
+      }
+      return {
+        user: user[0],
+        ...data,
+      };
     }),
 });

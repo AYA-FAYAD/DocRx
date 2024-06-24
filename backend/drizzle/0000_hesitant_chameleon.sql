@@ -30,12 +30,14 @@ CREATE TABLE `prescriptions` (
 	FOREIGN KEY (`patient_id`) REFERENCES `patients`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-DROP INDEX IF EXISTS `users_username_unique`;--> statement-breakpoint
-ALTER TABLE `users` ADD `name` text NOT NULL;--> statement-breakpoint
-ALTER TABLE `users` ADD `email` text NOT NULL;--> statement-breakpoint
-ALTER TABLE `users` ADD `role` text NOT NULL;--> statement-breakpoint
-ALTER TABLE `users` ADD `created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL;--> statement-breakpoint
-ALTER TABLE `users` ADD `updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL;--> statement-breakpoint
+CREATE TABLE `users` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`name` text NOT NULL,
+	`email` text NOT NULL,
+	`role` text DEFAULT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+--> statement-breakpoint
 CREATE UNIQUE INDEX `prescriptions_unique_number_unique` ON `prescriptions` (`unique_number`);--> statement-breakpoint
-CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
-ALTER TABLE `users` DROP COLUMN `username`;
+CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);

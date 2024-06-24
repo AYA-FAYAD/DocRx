@@ -2,7 +2,7 @@ import "dotenv/config";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 
 const clerkMiddleware = ClerkExpressWithAuth({
-  clientId: process.env.CLERK_PUBLISHABLE_KEY,
+  clientId: process.env.CLERK_PUBLISHABLE_KEY as string,
 });
 
 export { clerkMiddleware };
