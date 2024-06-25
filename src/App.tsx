@@ -15,6 +15,7 @@ import {
 
 import { HomePage } from "./pages/homePage.tsx";
 import NotFoundPage from "./pages/notFoundPage.tsx";
+import { RolePage } from "./components/role.tsx";
 
 import SignupForm from "./components/signUpForm.tsx";
 import LogIn from "./components/logIn.tsx";
@@ -25,6 +26,8 @@ const router = createBrowserRouter(
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LogIn />} />
       <Route path="/signup" element={<SignupForm />} />
+      <Route path="/selectrole" element={<RolePage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </>
   )
 );

@@ -60,7 +60,7 @@ export const userRouter = router({
         .insert(users)
         .values({
           name: input.name,
-          password: input.password,
+
           email: input.email,
           role: input.role,
         })
@@ -69,13 +69,34 @@ export const userRouter = router({
 
       return newUser;
     }),
+  updateUserRole: publicProcedure
+    .input(
+      z.object({
+        role: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.session?.userId;
+
+      if (!userId) {
+        throw new Error("User not logged in");
+      }
+
+      const updatedUser = await db
+        .update(users)
+        .set({ role: input.role })
+        .where(eq(users.id, userId))
+        .execute();
+
+      return updatedUser;
+    }),
 
   updateuser: publicProcedure
     .input(
       z.object({
         id: z.number().int(),
         name: z.string().optional(),
-        password: z.string().optional(),
+
         email: z.string().optional(),
       })
     )

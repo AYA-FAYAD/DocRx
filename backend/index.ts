@@ -45,8 +45,8 @@ app.post(
     const payload = req.body;
     const headers = req.headers as Record<string, string>;
 
-    console.log(`Payload: ${JSON.stringify(payload)}`);
-    console.log(`Headers: ${JSON.stringify(headers)}`);
+    // console.log(`Payload: ${JSON.stringify(payload)}`);
+    // console.log(`Headers: ${JSON.stringify(headers)}`);
 
     let msg;
     try {
@@ -62,20 +62,38 @@ app.post(
 
     try {
       switch (event) {
+        case "user.login":
+          await db
+            .select()
+            .from(users)
+            .where(
+              eq(users.email, payload.data.email_addresses[0].email_address)
+            )
+            .execute();
+
+          console.log(
+            `User login ${
+              payload.data.first_name + " " + payload.data.last_name
+            }`
+          );
+          console.log("Login user data:");
+          break;
+
         case "user.created":
           await db
             .insert(users)
             .values({
               name: payload.data.first_name + " " + payload.data.last_name,
               email: payload.data.email_addresses[0].email_address,
-
               role: "defaultRole", // Use a default role
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             })
             .execute();
+
           console.log("New user created");
           break;
+
         case "user.updated":
           await db
             .update(users)
@@ -89,8 +107,10 @@ app.post(
               eq(users.email, payload.data.email_addresses[0].email_address)
             )
             .execute();
+
           console.log("User updated");
           break;
+
         case "user.deleted":
           await db
             .delete(users)
@@ -98,16 +118,20 @@ app.post(
               eq(users.email, payload.data.email_addresses[0].email_address)
             )
             .execute();
+
           console.log("User deleted");
           break;
+
         case "session.created":
           // Handle session created
           console.log("New session created");
           break;
+
         case "session.ended":
           // Handle session ended
           console.log("Session ended");
           break;
+
         default:
           console.log("Unhandled event type:", event);
       }
