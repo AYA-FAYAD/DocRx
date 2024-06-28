@@ -10,7 +10,7 @@ import bodyParser from "body-parser";
 import { db } from "./db/db";
 import { users } from "./db/schema/schema";
 import { eq } from "drizzle-orm";
-
+import { setPayload } from "./setpyload";
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -59,6 +59,7 @@ app.post(
     console.log("Webhook verified successfully:", msg);
 
     const event = payload.type;
+    setPayload(payload);
 
     try {
       switch (event) {

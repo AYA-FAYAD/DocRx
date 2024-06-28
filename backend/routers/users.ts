@@ -4,7 +4,7 @@ import { router, publicProcedure } from "../trpc";
 import { doctors, patients, users } from "../db/schema/schema";
 import { db } from "../db/db";
 import { eq } from "drizzle-orm";
-
+import { getPayload } from "../setpyload";
 // const getUserSchema = z.object({
 //   id: z.number().int(),
 // });
@@ -69,27 +69,6 @@ export const userRouter = router({
 
       return newUser;
     }),
-  updateUserRole: publicProcedure
-    .input(
-      z.object({
-        role: z.string(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const userId = ctx.session?.userId;
-
-      if (!userId) {
-        throw new Error("User not logged in");
-      }
-
-      const updatedUser = await db
-        .update(users)
-        .set({ role: input.role })
-        .where(eq(users.id, userId))
-        .execute();
-
-      return updatedUser;
-    }),
 
   updateuser: publicProcedure
     .input(
@@ -122,6 +101,38 @@ export const userRouter = router({
         .where(eq(users.id, input.id))
         .execute();
       return deleteUser;
+    }),
+  upduterole: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        newRole: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const payload = getPayload(); // Get the latest payload
+      if (!payload) {
+        throw new Error("No payload available");
+      }
+      const user = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, payload.data.email_addresses[0].email_address));
+      if (!user.length) {
+        throw new Error("User not found");
+      }
+      const currentRole = user[0].role;
+
+      if (currentRole !== input.newRole) {
+        const updatedUser = await db
+          .update(users)
+          .set({ role: input.newRole })
+          .where(eq(users.email, payload.data.email_addresses[0].email_address))
+          .execute();
+
+        return updatedUser;
+      }
+      return user[0];
     }),
 
   getUserData: publicProcedure

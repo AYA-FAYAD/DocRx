@@ -1,29 +1,46 @@
 import React, { useState } from "react";
 import { trpc } from "../client";
 
-export const RolePage: React.FC = () => {
+function SetRole() {
+  const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
-  const mutation = trpc.user.updateUserRole.useMutation();
+  const mutation = trpc.user.upduterole.useMutation();
 
-  const handleUpdateRole = async () => {
+  const handleUpdateRole = async (e) => {
+    e.preventDefault();
     try {
-      await mutation.mutateAsync({ role });
-      alert("Role updated successfully");
+      await mutation.mutateAsync({
+        email,
+        newRole: role,
+      });
+      console.log("Role updated successfully");
+      setEmail("");
+      setRole("");
     } catch (error) {
-      console.error("Failed to update role", error);
+      console.error("Error updating role:", error);
     }
   };
 
   return (
-    <div>
+    <form onSubmit={handleUpdateRole}>
       <h1>Update Role</h1>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter user email"
+        required
+      />
       <input
         type="text"
         value={role}
         onChange={(e) => setRole(e.target.value)}
         placeholder="Enter new role"
+        required
       />
-      <button onClick={handleUpdateRole}>Update Role</button>
-    </div>
+      <button type="submit">Update Role</button>
+    </form>
   );
-};
+}
+
+export default SetRole;
