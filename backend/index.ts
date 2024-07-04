@@ -10,21 +10,22 @@ import bodyParser from "body-parser";
 import { db } from "./db/db";
 import { users } from "./db/schema/schema";
 import { eq } from "drizzle-orm";
-import { setPayload } from "./setpyload";
+import {
+  ClerkExpressWithAuth,
+  requireAuth,
+  clerkClient,
+} from "@clerk/clerk-sdk-node";
 dotenv.config();
 
 const port = process.env.PORT || 3000;
 
-const webhookSecret = process.env.CLERK_WEBHOOK_SECRET_KEY;
-if (!webhookSecret) {
-  throw new Error(
-    "CLERK_WEBHOOK_SECRET_KEY is not defined in the environment variables"
-  );
-}
-
 const app = express();
 app.use(cors());
 app.use(express.json());
+const clerkMiddleware = ClerkExpressWithAuth({
+  secretkey: process.env.CLERK_PUBLISHABLE_KEY,
+});
+
 app.use(clerkMiddleware);
 
 export type AppRouter = typeof appRouter;
@@ -35,6 +36,12 @@ app.use(
     createContext,
   })
 );
+const webhookSecret = process.env.CLERK_WEBHOOK_SECRET_KEY;
+if (!webhookSecret) {
+  throw new Error(
+    "CLERK_WEBHOOK_SECRET_KEY is not defined in the environment variables"
+  );
+}
 
 app.post(
   "/api/webhook",
@@ -59,7 +66,6 @@ app.post(
     console.log("Webhook verified successfully:", msg);
 
     const event = payload.type;
-    setPayload(payload);
 
     try {
       switch (event) {
@@ -87,6 +93,7 @@ app.post(
               name: payload.data.first_name + " " + payload.data.last_name,
               email: payload.data.email_addresses[0].email_address,
               role: "defaultRole", // Use a default role
+              clerkUserId: payload.data.id,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             })
@@ -126,6 +133,7 @@ app.post(
         case "session.created":
           // Handle session created
           console.log("New session created");
+          console.log("inside session.created ", payload);
           break;
 
         case "session.ended":

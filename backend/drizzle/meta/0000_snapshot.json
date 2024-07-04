@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "547e5389-7120-4d8d-9543-dcc1a256c100",
+  "id": "44023f47-ae41-4246-89d3-69eef686e041",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "doctors": {
@@ -253,6 +253,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "clerk_user_id": {
+          "name": "clerk_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "role": {
           "name": "role",
           "type": "text",
@@ -283,6 +290,13 @@
           "name": "users_email_unique",
           "columns": [
             "email"
+          ],
+          "isUnique": true
+        },
+        "users_clerk_user_id_unique": {
+          "name": "users_clerk_user_id_unique",
+          "columns": [
+            "clerk_user_id"
           ],
           "isUnique": true
         }

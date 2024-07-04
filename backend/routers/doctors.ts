@@ -5,6 +5,43 @@ import { db } from "../db/db";
 import { eq } from "drizzle-orm";
 
 export const doctorsRouter = router({
+  adddoctorinfo: publicProcedure
+    .input(
+      z.object({
+        clerkUserId: z.string(),
+        specialization: z.string(),
+        clinicAddress: z.string(),
+        phoneNumber: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      // Fetch the user using clerkUserId
+      const user = await db
+        .select()
+        .from(users)
+        .where(eq(users.clerkUserId, input.clerkUserId))
+        .execute();
+
+      if (user.length === 0) {
+        throw new Error("User not found");
+      }
+
+      const userId = user[0].id;
+
+      // Insert doctor info
+      const newDoctor = await db
+        .insert(doctors)
+        .values({
+          userId,
+          specialization: input.specialization,
+          clinicAddress: input.clinicAddress,
+          phoneNumber: input.phoneNumber,
+        })
+        .execute();
+
+      return newDoctor;
+    }),
+
   addprescriptions: publicProcedure
     .input(
       z.object({

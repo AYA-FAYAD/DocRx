@@ -5,6 +5,24 @@ import { db } from "../db/db";
 import { eq } from "drizzle-orm";
 
 export const patientsRouter = router({
+  addpatientinfo: publicProcedure
+    .input(
+      z.object({
+        userId: z.number().int(),
+        phoneNumber: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const addpatientinfo = await db
+        .insert(patients)
+        .values({
+          userId: input.userId,
+          phoneNumber: input.phoneNumber,
+        })
+        .execute();
+      return addpatientinfo;
+    }),
+
   getPatientPrescrition: publicProcedure
     .input(
       z.object({

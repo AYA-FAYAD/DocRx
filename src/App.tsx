@@ -4,6 +4,8 @@ import {
   RedirectToSignIn,
   SignInButton,
   UserButton,
+  useUser,
+  UserProfile,
 } from "@clerk/clerk-react";
 import {
   createBrowserRouter,
@@ -28,11 +30,15 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/selectrole" element={<SetRole />} />
       <Route path="*" element={<NotFoundPage />} />
+      <Route path="/user-profile" element={<UserProfile />} />
     </>
   )
 );
 
 export default function App() {
+  const { user, isSignedIn } = useUser();
+  console.log(user);
+  console.log("is user logged in? ", isSignedIn);
   return (
     <div>
       <header>

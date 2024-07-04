@@ -4,10 +4,6 @@ import { router, publicProcedure } from "../trpc";
 import { doctors, patients, users } from "../db/schema/schema";
 import { db } from "../db/db";
 import { eq } from "drizzle-orm";
-import { getPayload } from "../setpyload";
-// const getUserSchema = z.object({
-//   id: z.number().int(),
-// });
 
 export const userRouter = router({
   getUser: publicProcedure.query(async () => {
@@ -45,6 +41,7 @@ export const userRouter = router({
         .execute();
       return user;
     }),
+
   createUser: publicProcedure
     .input(
       z.object({
@@ -52,19 +49,18 @@ export const userRouter = router({
         password: z.string(),
         email: z.string(),
         role: z.string(),
+        clerkUserId: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      // console.log("Received input:", input);
       const newUser = await db
         .insert(users)
         .values({
           name: input.name,
-
+          clerkUserId: input.clerkUserId,
           email: input.email,
           role: input.role,
         })
-
         .execute();
 
       return newUser;
@@ -75,7 +71,6 @@ export const userRouter = router({
       z.object({
         id: z.number().int(),
         name: z.string().optional(),
-
         email: z.string().optional(),
       })
     )
@@ -105,36 +100,42 @@ export const userRouter = router({
   upduterole: publicProcedure
     .input(
       z.object({
-        email: z.string().email(),
+        clerkUserId: z.string(),
         newRole: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      const payload = getPayload(); // Get the latest payload
-      if (!payload) {
-        throw new Error("No payload available");
-      }
+      const { clerkUserId, newRole } = input;
+      console.log(
+        "Updating role for clerkUserId:",
+        clerkUserId,
+        "to new role:",
+        newRole
+      );
       const user = await db
         .select()
         .from(users)
-        .where(eq(users.email, payload.data.email_addresses[0].email_address));
+        .where(eq(users.clerkUserId, clerkUserId))
+        .execute();
+
+      console.log("User fetched from DB:", user);
+
       if (!user.length) {
         throw new Error("User not found");
       }
-      const currentRole = user[0].role;
 
-      if (currentRole !== input.newRole) {
+      const currentRole = user[0].role;
+      if (currentRole !== newRole) {
         const updatedUser = await db
           .update(users)
-          .set({ role: input.newRole })
-          .where(eq(users.email, payload.data.email_addresses[0].email_address))
+          .set({ role: newRole })
+          .where(eq(users.clerkUserId, clerkUserId))
           .execute();
-
         return updatedUser;
       }
+
       return user[0];
     }),
-
   getUserData: publicProcedure
     .input(
       z.object({

@@ -1,3 +1,9 @@
 export function HomePage() {
-  return <div>welcom in app</div>;
+  return (
+    <div>
+      <header>
+        <title>DocRx</title>
+      </header>
+    </div>
+  );
 }

@@ -8,28 +8,6 @@ import { eq } from "drizzle-orm";
 export const createContext = async ({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) => {
-  const { userId } = getAuth(req);
-  if (!userId) {
-    return {};
-  }
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, userId))
-    .execute();
-  const userRole = user?.[0]?.role || null;
-  console.log(
-    "Context created with userId:",
-    userId,
-    "and userRole:",
-    userRole
-  );
-
-  return {
-    userId,
-    userRole,
-  };
-};
+}: trpcExpress.CreateExpressContextOptions) => {};
 
 export type Context = ReturnType<typeof createContext>;
