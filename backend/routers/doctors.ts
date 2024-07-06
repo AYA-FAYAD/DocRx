@@ -15,7 +15,6 @@ export const doctorsRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      // Fetch the user using clerkUserId
       const user = await db
         .select()
         .from(users)
@@ -23,12 +22,10 @@ export const doctorsRouter = router({
         .execute();
 
       if (user.length === 0) {
-        throw new Error("User not found");
+        return new Error("User not found");
       }
-
       const userId = user[0].id;
 
-      // Insert doctor info
       const newDoctor = await db
         .insert(doctors)
         .values({
@@ -38,7 +35,6 @@ export const doctorsRouter = router({
           phoneNumber: input.phoneNumber,
         })
         .execute();
-
       return newDoctor;
     }),
 

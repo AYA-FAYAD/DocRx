@@ -106,35 +106,34 @@ export const userRouter = router({
     )
     .mutation(async ({ input }) => {
       const { clerkUserId, newRole } = input;
-      console.log(
-        "Updating role for clerkUserId:",
-        clerkUserId,
-        "to new role:",
-        newRole
-      );
+
       const user = await db
         .select()
         .from(users)
         .where(eq(users.clerkUserId, clerkUserId))
         .execute();
 
-      console.log("User fetched from DB:", user);
-
       if (!user.length) {
         throw new Error("User not found");
       }
 
+      console.log("user", user);
+
       const currentRole = user[0].role;
-      if (currentRole !== newRole) {
+      console.log(currentRole);
+
+      if (currentRole === "defaultRole") {
         const updatedUser = await db
           .update(users)
           .set({ role: newRole })
           .where(eq(users.clerkUserId, clerkUserId))
           .execute();
         return updatedUser;
+      } else {
+        throw new Error("you cant updute your role");
       }
 
-      return user[0];
+      // return user[0];
     }),
   getUserData: publicProcedure
     .input(

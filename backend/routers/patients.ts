@@ -8,19 +8,31 @@ export const patientsRouter = router({
   addpatientinfo: publicProcedure
     .input(
       z.object({
-        userId: z.number().int(),
+        clerkUserId: z.string(),
         phoneNumber: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      const addpatientinfo = await db
+      const user = await db
+        .select()
+        .from(users)
+        .where(eq(users.clerkUserId, input.clerkUserId))
+        .execute();
+      if (user.length === 0) {
+        return new Error("User not found");
+      }
+
+      const userId = user[0].id;
+
+      const newpatient = await db
         .insert(patients)
         .values({
-          userId: input.userId,
+          userId,
           phoneNumber: input.phoneNumber,
         })
         .execute();
-      return addpatientinfo;
+
+      return newpatient;
     }),
 
   getPatientPrescrition: publicProcedure
