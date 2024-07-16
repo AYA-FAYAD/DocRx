@@ -1,13 +1,32 @@
-// import {inferAsyncReturnType} from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
-import { ClerkExpressWithAuth, getAuth } from "@clerk/clerk-sdk-node";
-import { db } from "./db/db";
-import { users } from "./db/schema/schema";
-import { eq } from "drizzle-orm";
+import { verifyToken } from "@clerk/clerk-sdk-node";
+import { Request, Response } from "express";
 
 export const createContext = async ({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) => {};
+}: {
+  req: Request;
+  res: Response;
+}) => {
+  const authHeader = req.headers.authorization;
+  let clerkUserId = null;
+
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
+    try {
+      const session = await verifyToken(token);
+      clerkUserId = session.userId;
+    } catch (error) {
+      console.error("Token verification failed:", error);
+    }
+  }
+  console.log("Clerk User ID:", clerkUserId);
+  return {
+    req,
+    res,
+    clerkUserId,
+  };
+};
 
 export type Context = ReturnType<typeof createContext>;

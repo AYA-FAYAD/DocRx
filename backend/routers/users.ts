@@ -65,6 +65,32 @@ export const userRouter = router({
 
       return newUser;
     }),
+  getUserRole: publicProcedure
+    .input(
+      z.object({
+        clerkUserId: z.string(),
+      })
+    )
+
+    .query(async ({ input }) => {
+      if (!input.clerkUserId) {
+        throw new Error("Not authenticated");
+      }
+
+      const user = await db
+        .select()
+        .from(users)
+        .where(eq(users.clerkUserId, input.clerkUserId))
+        .execute();
+
+      if (!user.length) {
+        throw new Error("User not found");
+      }
+
+      console.log("User role:", user[0].role);
+
+      return { role: user[0].role };
+    }),
 
   updateuser: publicProcedure
     .input(

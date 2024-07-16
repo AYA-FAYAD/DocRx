@@ -18,6 +18,7 @@ import {
 import { HomePage } from "./pages/homePage.tsx";
 import NotFoundPage from "./pages/notFoundPage.tsx";
 import SetRole from "./components/role.tsx";
+import DoctorDashboard from "./components/DoctorDashboard.tsx";
 
 import SignupForm from "./components/signUpForm.tsx";
 import LogIn from "./components/logIn.tsx";
@@ -31,6 +32,7 @@ const router = createBrowserRouter(
       <Route path="/selectrole" element={<SetRole />} />
       <Route path="*" element={<NotFoundPage />} />
       <Route path="/user-profile" element={<UserProfile />} />
+      <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
     </>
   )
 );
