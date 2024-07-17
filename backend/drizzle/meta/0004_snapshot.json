@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "54f736c5-a2f0-4265-9e80-ecf7e29d150c",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "30635d31-f515-495f-81af-4a9907450c9e",
+  "prevId": "88704e37-9da2-4f58-9221-12960fd5a789",
   "tables": {
     "doctors": {
       "name": "doctors",

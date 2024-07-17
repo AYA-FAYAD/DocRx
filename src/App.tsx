@@ -14,6 +14,8 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
+import AddPrescription from "./components/AddPrescription.tsx";
+import AddPatient from "./components/Addpatient.tsx";
 
 import { HomePage } from "./pages/homePage.tsx";
 import NotFoundPage from "./pages/notFoundPage.tsx";
@@ -33,6 +35,8 @@ const router = createBrowserRouter(
       <Route path="*" element={<NotFoundPage />} />
       <Route path="/user-profile" element={<UserProfile />} />
       <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+      <Route path="/addprescription" element={<AddPrescription />} />
+      <Route path="/addpatient" element={<AddPatient />} />
     </>
   )
 );

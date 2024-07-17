@@ -5,7 +5,7 @@ export const users = sqliteTable("users", {
   id: int("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   email: text("email").unique().notNull(),
-  clerkUserId: text("clerk_user_id").unique().notNull(),
+  clerkUserId: text("clerk_user_id"),
 
   role: text("role").default(sql`NULL`),
   createdAt: text("created_at")

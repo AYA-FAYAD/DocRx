@@ -38,6 +38,47 @@ export const doctorsRouter = router({
       return newDoctor;
     }),
 
+  addPatient: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        email: z.string(),
+        phoneNumber: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const findpatient = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, input.email))
+        .execute();
+      if (findpatient.length > 0) {
+        return { findpatient: findpatient[0].email };
+      }
+
+      const newUser = await db
+        .insert(users)
+        .values({
+          name: input.name,
+          clerkUserId: null,
+          email: input.email,
+          role: "patient",
+        })
+        .returning()
+        .execute();
+
+      const userId = newUser[0].id;
+      const newPatient = await db
+        .insert(patients)
+        .values({
+          userId,
+          phoneNumber: input.phoneNumber,
+        })
+        .execute();
+
+      return { newUser, newPatient };
+    }),
+
   addprescriptions: publicProcedure
     .input(
       z.object({

@@ -46,7 +46,7 @@ export const userRouter = router({
     .input(
       z.object({
         name: z.string(),
-        password: z.string(),
+
         email: z.string(),
         role: z.string(),
         clerkUserId: z.string(),

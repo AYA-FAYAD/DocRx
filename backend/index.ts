@@ -69,23 +69,6 @@ app.post(
 
     try {
       switch (event) {
-        case "user.login":
-          await db
-            .select()
-            .from(users)
-            .where(
-              eq(users.email, payload.data.email_addresses[0].email_address)
-            )
-            .execute();
-
-          console.log(
-            `User login ${
-              payload.data.first_name + " " + payload.data.last_name
-            }`
-          );
-          console.log("Login user data:");
-          break;
-
         case "user.created":
           await db
             .insert(users)
@@ -101,6 +84,41 @@ app.post(
 
           console.log("New user created");
           break;
+
+        case "user.login": {
+          const user = await db
+            .select()
+            .from(users)
+            .where(
+              eq(users.email, payload.data.email_addresses[0].email_address)
+            )
+            .execute();
+
+          if (user.length > 0) {
+            const userRecord = user[0];
+            if (!userRecord.clerkUserId) {
+              await db
+                .update(users)
+                .set({
+                  clerkUserId: payload.data.id,
+                  updatedAt: new Date().toISOString(),
+                })
+                .where(
+                  eq(users.email, payload.data.email_addresses[0].email_address)
+                )
+                .execute();
+              console.log("User's clerkUserId updated");
+            }
+          }
+
+          console.log(
+            `User login ${
+              payload.data.first_name + " " + payload.data.last_name
+            }`
+          );
+          console.log("Login user data:");
+          break;
+        }
 
         case "user.updated":
           await db

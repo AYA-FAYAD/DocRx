@@ -9,7 +9,7 @@ const DoctorDashboard = () => {
       <Link to="/">add prescription</Link>
       <p>
         Welcome to the doctor's dashboard. Here you can manage your patients and
-        appointments.
+        add prescription here
       </p>
     </ProtectedPage>
   );
