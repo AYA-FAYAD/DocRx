@@ -4,6 +4,10 @@ import { doctors, patients, prescriptions, users } from "../db/schema/schema";
 import { db } from "../db/db";
 import { eq } from "drizzle-orm";
 
+function generateUniqueNumber() {
+  return Math.random().toString(36).substring(2, 15);
+}
+
 export const doctorsRouter = router({
   adddoctorinfo: publicProcedure
     .input(
@@ -82,30 +86,58 @@ export const doctorsRouter = router({
   addprescriptions: publicProcedure
     .input(
       z.object({
-        doctorId: z.number().int(),
-        patientId: z.number().int(),
+        doctorClerkUserId: z.string(),
+        patientEmail: z.string(),
         drugName: z.string(),
         dosage: z.string(),
         usageInstructions: z.string(),
         oneTimeUse: z.boolean(),
-        status: z.string(),
-        uniqueNumber: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      const addNewPrescrption = await db
+      // Find the doctor by clerkUserId
+      const doctor = await db
+        .select()
+        .from(doctors)
+        .innerJoin(users, eq(doctors.userId, users.id))
+        .where(eq(users.clerkUserId, input.doctorClerkUserId))
+        .execute();
+
+      if (doctor.length === 0) {
+        throw new Error("Doctor not found");
+      }
+
+      const doctorId = doctor[0].doctors.id;
+
+      // Find the patient by email
+      const patient = await db
+        .select()
+        .from(patients)
+        .innerJoin(users, eq(patients.userId, users.id))
+        .where(eq(users.email, input.patientEmail))
+        .execute();
+
+      if (patient.length === 0) {
+        throw new Error("Patient not found");
+      }
+
+      const patientId = patient[0].patients.id;
+
+      const uniqueNumber = generateUniqueNumber();
+
+      const addNewPrescription = await db
         .insert(prescriptions)
         .values({
-          doctorId: input.doctorId,
-          patientId: input.patientId,
+          doctorId,
+          patientId,
           drugName: input.drugName,
           dosage: input.dosage,
           usageInstructions: input.usageInstructions,
           oneTimeUse: input.oneTimeUse,
-          status: input.status,
-          uniqueNumber: input.uniqueNumber,
+          status: "active",
+          uniqueNumber: uniqueNumber,
         })
         .execute();
-      return addNewPrescrption;
+      return addNewPrescription;
     }),
 });

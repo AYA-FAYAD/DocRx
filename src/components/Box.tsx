@@ -1,54 +1,66 @@
-"use client";
-import { cn } from "../utils/cn";
-import React, { ReactNode } from "react";
+const posts = [
+  {
+    title: "write new prescription",
+    desc: "Going into this journey, I had a standard therapy regimen, based on looking at the research literature. After I saw the movie, I started to ask other people.",
+    img: "https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
 
-interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
-  children: ReactNode;
-  showRadialGradient?: boolean;
-}
+    href: "/addprescription",
+  },
+  {
+    title: "add new patient",
 
-export const AuroraBackground = ({
-  className,
-  children,
-  showRadialGradient = true,
-  ...props
-}: AuroraBackgroundProps) => {
+    img: "https://images.unsplash.com/photo-1620287341056-49a2f1ab2fdc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+
+    href: "/addpatient",
+  },
+  {
+    title: "see all perscription",
+
+    img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+
+    href: "javascript:void(0)",
+  },
+];
+
+export default function SideBar() {
   return (
-    <main>
-      <div
-        className={cn(
-          "relative flex flex-col  h-[100vh] items-center justify-center bg-zinc-50 dark:bg-zinc-900  text-slate-950 transition-bg",
-          className
-        )}
-        {...props}
-      >
-        <div className="absolute inset-0 overflow-hidden">
-          <div
-            //   I'm sorry but this is what peak developer performance looks like // trigger warning
-            className={cn(
-              `
-            [--white-gradient:repeating-linear-gradient(100deg,var(--white)_0%,var(--white)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--white)_16%)]
-            [--dark-gradient:repeating-linear-gradient(100deg,var(--black)_0%,var(--black)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--black)_16%)]
-            [--aurora:repeating-linear-gradient(100deg,var(--blue-500)_10%,var(--indigo-300)_15%,var(--blue-300)_20%,var(--violet-200)_25%,var(--blue-400)_30%)]
-            [background-image:var(--white-gradient),var(--aurora)]
-            dark:[background-image:var(--dark-gradient),var(--aurora)]
-            [background-size:300%,_200%]
-            [background-position:50%_50%,50%_50%]
-            filter blur-[10px] invert dark:invert-0
-            after:content-[""] after:absolute after:inset-0 after:[background-image:var(--white-gradient),var(--aurora)] 
-            after:dark:[background-image:var(--dark-gradient),var(--aurora)]
-            after:[background-size:200%,_100%] 
-            after:animate-aurora after:[background-attachment:fixed] after:mix-blend-difference
-            pointer-events-none
-            absolute -inset-[10px] opacity-50 will-change-transform`,
-
-              showRadialGradient &&
-                `[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,var(--transparent)_70%)]`
-            )}
-          ></div>
+    <section className="py-32">
+      <div className="max-w-screen-xl mx-auto px-4 md:px-8">
+        <div className="space-y-5 sm:text-center sm:max-w-md sm:mx-auto">
+          <h1 className="text-gray-800 text-3xl font-extrabold sm:text-4xl">
+            Doctor Dashboard
+          </h1>
+          <p className="text-gray-600">
+            Welcome to the doctor's dashboard. Here you can manage your patients
+            and add prescription here
+          </p>
         </div>
-        {children}
+        <ul className="grid gap-x- gap-y-10 mt-16 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((items, key) => (
+            <li className="w-full mx-auto group sm:max-w-sm" key={key}>
+              <a href={items.href}>
+                <img
+                  src={items.img}
+                  loading="lazy"
+                  alt={items.title}
+                  className="w-full rounded-lg"
+                />
+                <div className="mt-3 space-y-2">
+                  <span className="block text-indigo-600 text-sm">
+                    {items.date}
+                  </span>
+                  <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold text-center">
+                    {items.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm duration-150 group-hover:text-gray-800">
+                    {items.desc}
+                  </p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
-    </main>
+    </section>
   );
-};
+}

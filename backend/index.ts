@@ -50,10 +50,10 @@ app.post(
     const svixWebhook = new Webhook(webhookSecret);
 
     const payload = req.body;
-    const headers = req.headers as Record<string, string>;
+    const headers = req.headers;
 
-    // console.log(`Payload: ${JSON.stringify(payload)}`);
-    // console.log(`Headers: ${JSON.stringify(headers)}`);
+    console.log(`Received payload: ${JSON.stringify(payload)}`);
+    console.log(`Received headers: ${JSON.stringify(headers)}`);
 
     let msg;
     try {
@@ -66,101 +66,98 @@ app.post(
     console.log("Webhook verified successfully:", msg);
 
     const event = payload.type;
-
     try {
-      switch (event) {
-        case "user.created":
-          await db
-            .insert(users)
-            .values({
-              name: payload.data.first_name + " " + payload.data.last_name,
-              email: payload.data.email_addresses[0].email_address,
-              role: "defaultRole", // Use a default role
-              clerkUserId: payload.data.id,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            })
-            .execute();
-
-          console.log("New user created");
-          break;
-
-        case "user.login": {
+      if (event === "user.created") {
+        await db
+          .insert(users)
+          .values({
+            name: payload.data.first_name + " " + payload.data.last_name,
+            email: payload.data.email_addresses[0].email_address,
+            role: "defaultRole", // update it later
+            clerkUserId: payload.data.id,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          })
+          .execute();
+        console.log("New user created");
+      } else if (event === "session.created") {
+        const clerkUserId = payload.data.user_id;
+        if (clerkUserId) {
           const user = await db
             .select()
             .from(users)
-            .where(
-              eq(users.email, payload.data.email_addresses[0].email_address)
-            )
+            .where(eq(users.clerkUserId, clerkUserId))
             .execute();
 
           if (user.length > 0) {
-            const userRecord = user[0];
-            if (!userRecord.clerkUserId) {
+            console.log(`Found user: ${JSON.stringify(user[0])}`);
+            console.log("User already has a clerkUserId");
+          } else {
+            console.log("User not found by clerkUserId");
+          }
+
+          const clerkUser = await clerkClient.users.getUser(clerkUserId);
+          if (clerkUser) {
+            const email = clerkUser.emailAddresses[0].emailAddress;
+
+            const userByEmail = await db
+              .select()
+              .from(users)
+              .where(eq(users.email, email))
+              .execute();
+            if (userByEmail.length > 0) {
+              const userRecord = userByEmail[0];
+              console.log(`Found user by email: ${JSON.stringify(userRecord)}`);
+
               await db
                 .update(users)
                 .set({
-                  clerkUserId: payload.data.id,
+                  clerkUserId: clerkUserId,
                   updatedAt: new Date().toISOString(),
                 })
-                .where(
-                  eq(users.email, payload.data.email_addresses[0].email_address)
-                )
+                .where(eq(users.email, email))
                 .execute();
+
               console.log("User's clerkUserId updated");
+            } else {
+              console.log("User not found by email");
             }
+          } else {
+            console.log("Failed to fetch user details from Clerk");
           }
-
-          console.log(
-            `User login ${
-              payload.data.first_name + " " + payload.data.last_name
-            }`
-          );
-          console.log("Login user data:");
-          break;
+        } else {
+          console.log("clerkUserId not found in payload");
         }
+      } else if (event === "user.updated") {
+        console.log("Handling user.updated event");
 
-        case "user.updated":
-          await db
-            .update(users)
-            .set({
-              name: payload.data.first_name + " " + payload.data.last_name,
-              email: payload.data.email_addresses[0].email_address,
-              role: "defaultRole", // Use a default role
-              updatedAt: new Date().toISOString(),
-            })
-            .where(
-              eq(users.email, payload.data.email_addresses[0].email_address)
-            )
-            .execute();
+        await db
+          .update(users)
+          .set({
+            name: payload.data.first_name + " " + payload.data.last_name,
+            email: payload.data.email_addresses[0].email_address,
+            role: "defaultRole", // Use a default role
+            updatedAt: new Date().toISOString(),
+          })
+          .where(eq(users.email, payload.data.email_addresses[0].email_address))
+          .execute();
 
-          console.log("User updated");
-          break;
+        console.log("User updated");
+      } else if (event === "user.deleted") {
+        console.log("Handling user.deleted event");
 
-        case "user.deleted":
-          await db
-            .delete(users)
-            .where(
-              eq(users.email, payload.data.email_addresses[0].email_address)
-            )
-            .execute();
+        await db
+          .delete(users)
+          .where(eq(users.email, payload.data.email_addresses[0].email_address))
+          .execute();
 
-          console.log("User deleted");
-          break;
-
-        case "session.created":
-          // Handle session created
-          console.log("New session created");
-          console.log("inside session.created ", payload);
-          break;
-
-        case "session.ended":
-          // Handle session ended
-          console.log("Session ended");
-          break;
-
-        default:
-          console.log("Unhandled event type:", event);
+        console.log("User deleted");
+      } else if (event === "session.ended") {
+        console.log("Handling session.ended event");
+        // Handle session ended
+        console.log("Session ended");
+      } else {
+        console.log("Unhandled event type:", event);
       }
     } catch (error) {
       console.error("Database operation failed:", error);
