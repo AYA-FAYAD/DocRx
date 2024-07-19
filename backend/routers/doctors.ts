@@ -5,7 +5,9 @@ import { db } from "../db/db";
 import { eq } from "drizzle-orm";
 
 function generateUniqueNumber() {
-  return Math.random().toString(36).substring(2, 15);
+  return Math.floor(
+    100000000000000 + Math.random() * 900000000000000
+  ).toString();
 }
 
 export const doctorsRouter = router({
@@ -95,7 +97,7 @@ export const doctorsRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      // Find the doctor by clerkUserId
+      // find doctor
       const doctor = await db
         .select()
         .from(doctors)
@@ -104,12 +106,12 @@ export const doctorsRouter = router({
         .execute();
 
       if (doctor.length === 0) {
-        throw new Error("Doctor not found");
+        throw new Error("Doctor not found ");
       }
 
       const doctorId = doctor[0].doctors.id;
 
-      // Find the patient by email
+      // Find patient
       const patient = await db
         .select()
         .from(patients)
