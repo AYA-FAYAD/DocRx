@@ -43,6 +43,43 @@ export const doctorsRouter = router({
         .execute();
       return newDoctor;
     }),
+  getPrescriptions: publicProcedure
+    .input(
+      z.object({
+        doctorClerkUserId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      console.log("Input doctorClerkUserId:", input.doctorClerkUserId);
+
+      // Fetch doctor using clerkUserId
+      const doctor = await db
+        .select()
+        .from(doctors)
+        .innerJoin(users, eq(doctors.userId, users.id))
+        .where(eq(users.clerkUserId, input.doctorClerkUserId))
+        .execute();
+
+      console.log("Fetched doctor:", doctor);
+
+      if (doctor.length === 0) {
+        throw new Error("Doctor not found");
+      }
+
+      const doctorId = doctor[0].doctors.id;
+      console.log("Doctor ID:", doctorId);
+
+      // Fetch prescriptions using doctorId
+      const prescriptionsList = await db
+        .select()
+        .from(prescriptions)
+        .where(eq(prescriptions.doctorId, doctorId))
+        .execute();
+
+      console.log("Fetched prescriptions:", prescriptionsList);
+
+      return prescriptionsList;
+    }),
 
   addPatient: publicProcedure
     .input(

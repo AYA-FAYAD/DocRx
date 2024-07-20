@@ -15,6 +15,7 @@ function AddPrescription() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      console.log("Fetching prescriptions for user ID:", user.id);
       await addPrescriptionMutation.mutateAsync({
         doctorClerkUserId: user.id,
         patientEmail,
@@ -31,12 +32,12 @@ function AddPrescription() {
   };
 
   return (
-    <form className="max-w-md mx-auto">
+    <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
       <div className="relative z-0 w-full mb-5 group">
         <input
           type="email"
-          name="floating_email"
-          id="floating_email"
+          value={patientEmail}
+          onChange={(e) => setPatientEmail(e.target.value)}
           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           placeholder=" "
           required
@@ -48,8 +49,8 @@ function AddPrescription() {
       <div className="relative z-0 w-full mb-5 group">
         <input
           type="text"
-          name="floating_password"
-          id="floating_password"
+          value={drugName}
+          onChange={(e) => setDrugName(e.target.value)}
           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           placeholder=" "
           required
@@ -60,9 +61,9 @@ function AddPrescription() {
       </div>
       <div className="relative z-0 w-full mb-5 group">
         <input
-          type="password"
-          name="repeat_password"
-          id="floating_repeat_password"
+          type="text"
+          value={dosage}
+          onChange={(e) => setDosage(e.target.value)}
           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           placeholder=" "
           required
@@ -88,7 +89,9 @@ function AddPrescription() {
         </label>
 
         <textarea
-          id="message"
+          type="text"
+          value={usageInstructions}
+          onChange={(e) => setUsageInstructions(e.target.value)}
           rows="4"
           className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder=""

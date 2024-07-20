@@ -16,6 +16,7 @@ import {
 } from "react-router-dom";
 import AddPrescription from "./components/AddPrescription.tsx";
 import AddPatient from "./components/Addpatient.tsx";
+import AllPrescrioption from "./components/AllPrescription.tsx";
 
 import { HomePage } from "./pages/homePage.tsx";
 import NotFoundPage from "./pages/notFoundPage.tsx";
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
       <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
       <Route path="/addprescription" element={<AddPrescription />} />
       <Route path="/addpatient" element={<AddPatient />} />
+      <Route path="/AllPrescription" element={<AllPrescrioption />} />
     </>
   )
 );
@@ -56,12 +58,7 @@ export default function App() {
         </SignedIn>
       </header>
       <main>
-        <SignedIn>
-          <RouterProvider router={router} />
-        </SignedIn>
-        <SignedOut>
-          <RedirectToSignIn />
-        </SignedOut>
+        <RouterProvider router={router} />
       </main>
     </div>
   );
