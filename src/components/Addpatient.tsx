@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { trpc } from "../client";
 import { useUser } from "@clerk/clerk-react";
+import ProtectedPage from "./protectedPage";
 
 function AddPatient() {
   const { user } = useUser();
@@ -23,45 +24,47 @@ function AddPatient() {
     }
   };
   return (
-    <div>
-      <h1>add new patient</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Patient Email:
-            <input
-              type="email"
-              value={patienEmail}
-              onChange={(e) => setPatientEmail(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Patient Name:
-            <input
-              type="text"
-              value={patientName}
-              onChange={(e) => setPatientName(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Patient PhoneNumber:
-            <input
-              type="text"
-              value={patientPhone}
-              onChange={(e) => setPatientPhone(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <button type="submit">Add Patient</button>
-      </form>
-    </div>
+    <ProtectedPage allowedRole="doctor">
+      <div>
+        <h1>add new patient</h1>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>
+              Patient Email:
+              <input
+                type="email"
+                value={patienEmail}
+                onChange={(e) => setPatientEmail(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Patient Name:
+              <input
+                type="text"
+                value={patientName}
+                onChange={(e) => setPatientName(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Patient PhoneNumber:
+              <input
+                type="text"
+                value={patientPhone}
+                onChange={(e) => setPatientPhone(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <button type="submit">Add Patient</button>
+        </form>
+      </div>
+    </ProtectedPage>
   );
 }
 

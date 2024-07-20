@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { trpc } from "../client";
 import { useUser } from "@clerk/clerk-react";
 import PrescriptionDetail from "./PrescriptionDetail";
 
-function AllPrescriptions() {
+function AllPatientPrescriptions() {
   const { user } = useUser();
-  const [error, setError] = useState(null);
   const [selectedPrescription, setSelectedPrescription] = useState(null);
-
   const {
     data: prescriptions,
-    error: fetchError,
+    error,
     isLoading,
-  } = trpc.doctor.getPrescriptions.useQuery(
-    { doctorClerkUserId: user?.id ?? "" },
+  } = trpc.patient.getPatientPrescrition.useQuery(
+    { patientClerkId: user?.id ?? "" },
     { enabled: !!user?.id }
   );
 
-  useEffect(() => {
-    if (fetchError) {
-      setError(fetchError.message);
-    }
-  }, [fetchError]);
-
   if (isLoading) return <p>Loading...</p>;
-
+  if (error) return <p>{error.message}</p>;
   return (
     <div>
       <h2>All Prescriptions</h2>
@@ -50,4 +42,4 @@ function AllPrescriptions() {
   );
 }
 
-export default AllPrescriptions;
+export default AllPatientPrescriptions;
