@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1721235340465,
-      "tag": "0000_brown_pretty_boy",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1721236010623,
-      "tag": "0001_spotty_blur",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1721236045032,
-      "tag": "0002_melodic_nextwave",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1721244301615,
-      "tag": "0003_shocking_cerise",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1721244334691,
-      "tag": "0004_familiar_thunderbolts",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1721316104975,
-      "tag": "0005_conscious_pretty_boy",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1721316136020,
-      "tag": "0006_perfect_hemingway",
+      "when": 1721770836286,
+      "tag": "0000_salty_hemingway",
       "breakpoints": true
     }
   ]

@@ -1,6 +1,6 @@
 import useUserRole from "../hooks/useUserRole";
-
-const ProtectedPage = ({ children, allowedRole }) => {
+import { Navigate } from "react-router-dom";
+const ProtectedPage = ({ children, allowedRole }: any) => {
   const { role, isLoading, error } = useUserRole();
 
   if (isLoading) {
@@ -11,8 +11,12 @@ const ProtectedPage = ({ children, allowedRole }) => {
     return <div> Error:{error.message}</div>;
   }
 
+  if (role === "defaultRole") {
+    return <Navigate to="/selectrole" />;
+  }
+
   if (role !== allowedRole) {
-    return <div> go way you are not doctor</div>;
+    return <Navigate to="/Allprescription" />;
   }
 
   return <>{children}</>;

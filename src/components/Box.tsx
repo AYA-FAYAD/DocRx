@@ -1,24 +1,26 @@
+import pre from "../assets/pre.png";
+import myimgd from "../assets/myimgd.png";
 const posts = [
   {
     title: "write new prescription",
-    desc: "Going into this journey, I had a standard therapy regimen, based on looking at the research literature. After I saw the movie, I started to ask other people.",
-    img: "https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+
+    img: pre,
 
     href: "/addprescription",
   },
   {
     title: "add new patient",
 
-    img: "https://images.unsplash.com/photo-1620287341056-49a2f1ab2fdc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+    img: myimgd,
 
     href: "/addpatient",
   },
   {
-    title: "see all perscription",
+    title: "Find prescrption",
 
-    img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+    img: myimgd,
 
-    href: "javascript:void(0)",
+    href: "/FindPatient",
   },
 ];
 
@@ -43,7 +45,7 @@ export default function SideBar() {
                   src={items.img}
                   loading="lazy"
                   alt={items.title}
-                  className="w-full rounded-lg"
+                  className="w-50 h-40 rounded-lg mx-auto  "
                 />
                 <div className="mt-3 space-y-2">
                   <span className="block text-indigo-600 text-sm">
