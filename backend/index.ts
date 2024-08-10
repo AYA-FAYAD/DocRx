@@ -84,8 +84,6 @@ app.post(
             .execute();
 
           if (user.length > 0) {
-            console.log(`Found user: ${JSON.stringify(user[0])}`);
-            console.log("User already has a clerkUserId");
           } else {
             console.log("User not found by clerkUserId");
           }
@@ -111,8 +109,6 @@ app.post(
                 })
                 .where(eq(users.email, email))
                 .execute();
-
-              console.log("User's clerkUserId updated");
             } else {
               console.log("User not found by email");
             }
@@ -135,8 +131,6 @@ app.post(
           })
           .where(eq(users.email, payload.data.email_addresses[0].email_address))
           .execute();
-
-        console.log("User updated");
       } else if (event === "user.deleted") {
         console.log("Handling user.deleted event");
 
@@ -144,8 +138,6 @@ app.post(
           .delete(users)
           .where(eq(users.email, payload.data.email_addresses[0].email_address))
           .execute();
-
-        console.log("User deleted");
       } else if (event === "session.ended") {
         console.log("Handling session.ended event");
         // Handle session ended

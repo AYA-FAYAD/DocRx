@@ -31,13 +31,10 @@ function SetRole() {
 
   const handleUpdateRole = async (e: Event) => {
     e.preventDefault();
-    console.log("Form submitted");
-    console.log("clerkUserId:", clerkUserId); // Check if clerkUserId is set correctly
-    console.log("newRole:", newRole); // Check if newRole is set correctly
+    ("Form submitted");
 
     try {
       await mutation.mutateAsync({ clerkUserId, newRole });
-      console.log("Role updated");
 
       if (newRole === "doctor") {
         await addDoctorInfo.mutateAsync({
@@ -46,13 +43,11 @@ function SetRole() {
           clinicAddress,
           phoneNumber: doctorPhoneNumber,
         });
-        console.log("Doctor info added");
       } else if (newRole === "patient") {
         await addPatientInfo.mutateAsync({
           clerkUserId,
           phoneNumber: patientPhoneNumber,
         });
-        console.log("Patient info added");
       }
 
       resetForm();
@@ -86,7 +81,6 @@ function SetRole() {
             value={newRole}
             onChange={(e) => {
               setNewRole(e.target.value);
-              console.log("Selected role:", e.target.value);
             }}
             className="w-full p-2 border border-gray-300 rounded-md"
           >

@@ -82,9 +82,6 @@ const router = createBrowserRouter(
 );
 
 export default function App() {
-  const { user, isSignedIn } = useUser();
-  console.log(user);
-  console.log("is user logged in? ", isSignedIn);
   return (
     <div>
       {/* <SignedOut>

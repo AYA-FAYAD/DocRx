@@ -12,7 +12,6 @@ function Navbar() {
   const { user, isSignedIn } = useUser();
   const { role, isLoading, error } = useUserRole();
 
-  console.log("role is :", role);
   return (
     <nav className="bg-transparent border-gray-200 dark:bg-transparent">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">

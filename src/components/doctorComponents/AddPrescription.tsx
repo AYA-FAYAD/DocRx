@@ -18,7 +18,6 @@ function AddPrescription() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log("Fetching prescriptions for user ID:", user.id);
       await addPrescriptionMutation.mutateAsync({
         doctorClerkUserId: user.id,
         patientEmail,

@@ -17,13 +17,12 @@ export const userRouter = router({
       })
     )
     .query(async ({ input }) => {
-      console.log("Received input:", input);
       const user = await db
         .select()
         .from(users)
         .where(eq(users.name, input.name))
         .execute();
-      console.log("Query result:", user);
+
       return user;
     }),
   getUserById: publicProcedure
@@ -33,7 +32,6 @@ export const userRouter = router({
       })
     )
     .query(async ({ input }) => {
-      console.log("Received input:", input);
       const user = await db
         .select()
         .from(users)
@@ -86,8 +84,6 @@ export const userRouter = router({
       if (!user.length) {
         throw new Error("User not found");
       }
-
-      console.log("User role:", user[0].role);
 
       return { role: user[0].role };
     }),
@@ -143,10 +139,7 @@ export const userRouter = router({
         throw new Error("User not found");
       }
 
-      console.log("user", user);
-
       const currentRole = user[0].role;
-      console.log(currentRole);
 
       if (currentRole === "defaultRole") {
         const updatedUser = await db

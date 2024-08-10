@@ -5,8 +5,6 @@ import PrescriptionDetail from "./PrescriptionDetail";
 import PrescriptionTable from "./prescriptionTable";
 
 function AllUserPrescriptions() {
-  console.log("test test");
-
   const { user } = useUser();
   const [role, setRole] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
