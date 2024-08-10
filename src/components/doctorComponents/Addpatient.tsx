@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { trpc } from "../client";
-import { useUser } from "@clerk/clerk-react";
-import ProtectedPage from "./protectedPage";
+import { useState } from "react";
+import { trpc } from "../../client";
+
+import ProtectedPage from "../protectedPage";
 
 function AddPatient() {
   const [patienEmail, setPatientEmail] = useState("");
@@ -9,7 +9,7 @@ function AddPatient() {
   const [patientPhone, setPatientPhone] = useState("");
   const addNewPatient = trpc.doctor.addPatient.useMutation();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: Event) => {
     e.preventDefault();
     try {
       await addNewPatient.mutateAsync({
@@ -84,45 +84,3 @@ function AddPatient() {
 }
 
 export default AddPatient;
-
-{
-  /* <div>
-<h1>add new patient</h1>
-<form onSubmit={handleSubmit}>
-  <div>
-    <label>
-      Patient Email:
-      <input
-        type="email"
-        value={patienEmail}
-        onChange={(e) => setPatientEmail(e.target.value)}
-        required
-      />
-    </label>
-  </div>
-  <div>
-    <label>
-      Patient Name:
-      <input
-        type="text"
-        value={patientName}
-        onChange={(e) => setPatientName(e.target.value)}
-        required
-      />
-    </label>
-  </div>
-  <div>
-    <label>
-      Patient PhoneNumber:
-      <input
-        type="text"
-        value={patientPhone}
-        onChange={(e) => setPatientPhone(e.target.value)}
-        required
-      />
-    </label>
-  </div>
-  <button type="submit">Add Patient</button>
-</form>
-</div> */
-}

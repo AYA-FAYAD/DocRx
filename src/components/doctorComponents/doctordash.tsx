@@ -1,5 +1,6 @@
-import pre from "../assets/pre.png";
-import myimgd from "../assets/myimgd.png";
+import pre from "../../assets/addp.png";
+import add from "../../assets/add.png";
+import find from "../../assets/find.png";
 const posts = [
   {
     title: "write new prescription",
@@ -11,14 +12,14 @@ const posts = [
   {
     title: "add new patient",
 
-    img: myimgd,
+    img: add,
 
     href: "/addpatient",
   },
   {
     title: "Find prescrption",
 
-    img: myimgd,
+    img: find,
 
     href: "/FindPatient",
   },
@@ -48,15 +49,9 @@ export default function SideBar() {
                   className="w-50 h-40 rounded-lg mx-auto  "
                 />
                 <div className="mt-3 space-y-2">
-                  <span className="block text-indigo-600 text-sm">
-                    {items.date}
-                  </span>
                   <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold text-center">
                     {items.title}
                   </h3>
-                  <p className="text-gray-600 text-sm duration-150 group-hover:text-gray-800">
-                    {items.desc}
-                  </p>
                 </div>
               </a>
             </li>

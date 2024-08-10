@@ -1,7 +1,5 @@
 import { IoIosClose } from "react-icons/io";
 
-import { useNavigate } from "react-router-dom";
-
 function PrescriptionDetails({ prescription, setShowDetails }: any) {
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white border border-gray-300 rounded-lg shadow-md">

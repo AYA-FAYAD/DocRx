@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { trpc } from "../client";
+import { trpc } from "../../client";
 import { useUser } from "@clerk/clerk-react";
 import PrescriptionDetail from "./PrescriptionDetail";
 import PrescriptionTable from "./prescriptionTable";

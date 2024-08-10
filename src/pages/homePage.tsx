@@ -1,5 +1,5 @@
-import myimge from "../assets/myimg.png";
-
+import logo from "../assets/logo.png";
+import { SignUp } from "@clerk/clerk-react";
 export function HomePage() {
   return (
     <div>
@@ -7,7 +7,7 @@ export function HomePage() {
         <div className="max-w-screen-xl mx-auto md:px-8">
           <div className="items-center gap-x-12 sm:px-4 md:px-0 lg:flex">
             <div className="flex-1 sm:hidden lg:block">
-              <img src={myimge} className="md:max-w-lg sm:rounded-lg" alt="" />
+              <img src={logo} className="md:max-w-lg sm:rounded-lg" alt="" />
             </div>
             <div className="max-w-xl px-4 space-y-3 mt-6 sm:px-0 md:mt-0 lg:max-w-2xl">
               <h3 className="text-indigo-600 font-semibold">
@@ -17,16 +17,16 @@ export function HomePage() {
                 Your Online Prescription Solution
               </p>
               <p className="mt-3 text-gray-600">
-                At docRx, we simplify healthcare by connecting doctors and
-                patients through a seamless, secure platform. Doctors can easily
-                write prescriptions online, and patients can access their
-                prescriptions anytime, anywhere.
+                At docRx, we revolutionize healthcare by bridging the gap
+                between doctors and patients with our secure, user-friendly
+                platform. Doctors can effortlessly write prescriptions online,
+                while patients can access their prescriptions anytime, anywhere.
               </p>
               <a
-                href="javascript:void(0)"
+                href="/SignUp"
                 className="inline-flex gap-x-1 items-center text-indigo-600 hover:text-indigo-500 duration-150 font-medium"
               >
-                Learn more
+                Join us
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"

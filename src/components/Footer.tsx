@@ -26,7 +26,7 @@ const Footer = () => {
           </a>
 
           <a
-            href="#"
+            href="https://github.com/AYA-FAYAD"
             className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             <svg
@@ -45,7 +45,7 @@ const Footer = () => {
             <span className="sr-only">GitHub account</span>
           </a>
           <a
-            href="#"
+            href="https://www.linkedin.com/in/aya-fayyad-4806b21b6/"
             className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             <svg

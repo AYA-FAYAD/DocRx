@@ -4,8 +4,7 @@ import {
   SignInButton,
   useUser,
   UserProfile,
-  RedirectToSignIn,
-  RedirectToOrganizationProfile,
+  SignUp,
 } from "@clerk/clerk-react";
 import {
   createBrowserRouter,
@@ -13,15 +12,17 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import AddPrescription from "./components/AddPrescription.tsx";
-import AddPatient from "./components/Addpatient.tsx";
-import AllUserPrescriptions from "./components/AllPrescription.tsx";
+import AddPrescription from "./components/doctorComponents/AddPrescription.tsx";
+import AddPatient from "./components/doctorComponents/Addpatient.tsx";
+import AllUserPrescriptions from "./components/prescriptionComponents/AllPrescription.tsx";
 import ProtectedPage from "./components/protectedPage.tsx";
 import { HomePage } from "./pages/homePage.tsx";
 import NotFoundPage from "./pages/notFoundPage.tsx";
 import SetRole from "./components/role.tsx";
-import DoctorDashboard from "./components/DoctorDashboard.tsx";
-import FindPatient from "./components/FindPatient.tsx";
+import DoctorDashboard from "./components/doctorComponents/DoctorDashboard.tsx";
+import FindPatient from "./components/doctorComponents/FindPatient.tsx";
+import CenteredSignUp from "./pages/Singup.tsx";
+import { About } from "./components/About.tsx";
 
 import Layout from "./components/Layout.tsx";
 import "./App.css";
@@ -30,8 +31,8 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        {/* <Route path="/login" element={<LogIn />} />
-        <Route path="/signup" element={<SignupForm />} /> */}
+        <Route path="/About" element={<About />} />
+        <Route path="/signup" element={<CenteredSignUp />} />
         <Route path="/selectrole" element={<SetRole />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/user-profile" element={<UserProfile />} />
@@ -59,7 +60,14 @@ const router = createBrowserRouter(
             </ProtectedPage>
           }
         />
-        <Route path="/Allprescription" element={<AllUserPrescriptions />} />
+        <Route
+          path="/Allprescription"
+          element={
+            <ProtectedPage allowedRole={["patient", "doctor"]}>
+              <AllUserPrescriptions />
+            </ProtectedPage>
+          }
+        />
         <Route
           path="/FindPatient"
           element={

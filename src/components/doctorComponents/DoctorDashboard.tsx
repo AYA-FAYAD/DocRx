@@ -1,4 +1,4 @@
-import SideBar from "./Box";
+import SideBar from "./doctordash";
 
 const DoctorDashboard = () => {
   return <SideBar />;

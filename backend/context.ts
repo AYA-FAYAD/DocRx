@@ -21,7 +21,7 @@ export const createContext = async ({
       console.error("Token verification failed:", error);
     }
   }
-  console.log("Clerk User ID:", clerkUserId);
+
   return {
     req,
     res,

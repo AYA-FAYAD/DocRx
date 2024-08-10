@@ -52,9 +52,6 @@ app.post(
     const payload = req.body;
     const headers = req.headers;
 
-    console.log(`Received payload: ${JSON.stringify(payload)}`);
-    console.log(`Received headers: ${JSON.stringify(headers)}`);
-
     let msg;
     try {
       msg = svixWebhook.verify(JSON.stringify(payload), headers);
@@ -62,8 +59,6 @@ app.post(
       console.error("Webhook verification failed:", err);
       return res.status(400).json({ error: "Invalid webhook signature" });
     }
-
-    console.log("Webhook verified successfully:", msg);
 
     const event = payload.type;
     try {
@@ -79,7 +74,6 @@ app.post(
             updatedAt: new Date().toISOString(),
           })
           .execute();
-        console.log("New user created");
       } else if (event === "session.created") {
         const clerkUserId = payload.data.user_id;
         if (clerkUserId) {
